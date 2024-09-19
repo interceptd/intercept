@@ -55,6 +55,7 @@ jobs:
         with:
           allow_override: "true"
           draft: "true"
+          tag: "v0.0.0"
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ steps.get_version.outputs.VERSION }}
           body: >

@@ -24,10 +24,16 @@ jobs:
         with: 
           go-version-file: go.mod
 
-      - name: Fetch Tags
+      - name: Fetch Latest Tag
         run: |
           git fetch --tags -f
-          git describe --tags `git rev-list --tags --max-count=1`
+          current_branch=$(git rev-parse --abbrev-ref HEAD)
+          if [ "$current_branch" = "master" ]; then
+            latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          else
+            latest_tag="v0.0.0"
+          fi
+          echo "Using Tag: $latest_tag"
 
       - name: Get dependencies
         run: |

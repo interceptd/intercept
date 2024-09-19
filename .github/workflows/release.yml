@@ -46,16 +46,17 @@ jobs:
       - name: Make all release artifacts
         run: make build-all
 
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Set VERSION output
+        run: |
+          GIT_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.X")
+          echo "::set-output name=VERSION::$GIT_TAG"
 
       - name: Upload All artifacts
         uses: meeDamian/github-release@2.0
         with:
           allow_override: "true"
           draft: "true"
-          tag: "v0.0.0"
+          tag: ${{ steps.get_version.outputs.VERSION }}
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ steps.get_version.outputs.VERSION }}
           body: >
